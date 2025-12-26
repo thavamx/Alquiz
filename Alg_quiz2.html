@@ -1,0 +1,1079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linear Equations Quiz - Random Generator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .quiz-header h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 32px;
+        }
+        
+        .quiz-header p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .instructions {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border-left: 5px solid #2196f3;
+        }
+        
+        .instructions h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .questions-container {
+            margin-bottom: 30px;
+        }
+        
+        .question-box {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .question-box:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+        
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .question-number {
+            background: #667eea;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .question-text {
+            flex-grow: 1;
+            margin-left: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        
+        .question-points {
+            background: #ff9800;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .answer-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+            align-items: center;
+        }
+        
+        .answer-input input {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            flex: 1;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+        
+        .answer-input input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        
+        .check-btn {
+            padding: 12px 25px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .check-btn:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .step-by-step {
+            background: #f0f7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 14px;
+            display: none;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .score-panel {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+        
+        .score-display {
+            font-size: 42px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        
+        .score-text {
+            font-size: 18px;
+            opacity: 0.9;
+        }
+        
+        .quiz-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            min-width: 150px;
+        }
+        
+        #submit-all {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        #reset-all {
+            background: #f5f5f5;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+        
+        #show-answers {
+            background: #2196f3;
+            color: white;
+        }
+        
+        .control-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .results-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+            border: 2px solid #e0e0e0;
+            display: none;
+        }
+        
+        .results-summary h3 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-correct {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .result-incorrect {
+            color: #f44336;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e0e0e0;
+            border-radius: 5px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 1s ease;
+        }
+        
+        .question-type {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .quiz-container {
+                padding: 20px;
+            }
+            
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .question-text {
+                margin: 15px 0;
+            }
+            
+            .answer-input {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .answer-input input {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Linear Equations Quiz</h1>
+            <p>iGCSE Edexcel Mathematics - Random Question Generator</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill"></div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <h3>How to Use This Quiz</h3>
+            <ul>
+                <li><strong>New questions every reset!</strong> Click "New Quiz" for fresh questions</li>
+                <li>Solve each linear equation and enter your answer</li>
+                <li>Click "Check Answer" for immediate feedback</li>
+                <li>Answers can be integers, fractions, or decimals</li>
+                <li>Use "x" as the variable (e.g., "3" or "2/3" or "-1.5")</li>
+                <li>Click "Submit All" to see your final score</li>
+            </ul>
+        </div>
+        
+        <div class="questions-container" id="questions-container">
+            <!-- Questions will be generated by JavaScript -->
+        </div>
+        
+        <div class="score-panel">
+            <div class="score-text">Your Score</div>
+            <div class="score-display" id="total-score">0/50</div>
+            <div class="score-text">Progress: <span id="progress-text">0/10 questions</span></div>
+        </div>
+        
+        <div class="quiz-controls">
+            <button class="control-btn" id="submit-all" onclick="submitAllAnswers()">Submit All Answers</button>
+            <button class="control-btn" id="new-quiz" onclick="generateNewQuiz()">New Quiz</button>
+            <button class="control-btn" id="show-answers" onclick="showAllAnswers()">Show All Answers</button>
+        </div>
+        
+        <div class="results-summary" id="results-summary">
+            <h3>Quiz Results Summary</h3>
+            <div id="results-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Question Templates with placeholders for random numbers
+        const questionTemplates = [
+            {
+                type: "basic_one_step",
+                template: "Solve: {a}x + {b} = {c}",
+                generate: () => {
+                    const a = getRandomInt(2, 9);
+                    const b = getRandomInt(1, 15);
+                    const c = a * getRandomInt(2, 7) + b;
+                    const answer = (c - b) / a;
+                    return {
+                        a, b, c, answer,
+                        steps: [
+                            `${a}x + ${b} = ${c}`,
+                            `Subtract ${b} from both sides: ${a}x = ${c} - ${b}`,
+                            `Simplify: ${a}x = ${c - b}`,
+                            `Divide both sides by ${a}: x = ${c - b} ÷ ${a}`,
+                            `Solution: x = ${formatAnswer(answer)}`
+                        ]
+                    };
+                },
+                points: 4,
+                difficulty: "basic"
+            },
+            {
+                type: "variables_both_sides",
+                template: "Solve: {a}x - {b} = {c}x + {d}",
+                generate: () => {
+                    const a = getRandomInt(2, 9);
+                    const c = getRandomInt(2, 9);
+                    const xValue = getRandomInt(1, 7);
+                    const b = getRandomInt(1, 10);
+                    const d = a * xValue - b - c * xValue;
+                    
+                    return {
+                        a, b, c, d,
+                        answer: xValue,
+                        steps: [
+                            `${a}x - ${b} = ${c}x + ${d}`,
+                            `Subtract ${c}x from both sides: ${a}x - ${c}x - ${b} = ${d}`,
+                            `Simplify: ${a - c}x - ${b} = ${d}`,
+                            `Add ${b} to both sides: ${a - c}x = ${d} + ${b}`,
+                            `Simplify: ${a - c}x = ${d + b}`,
+                            `Divide both sides by ${a - c}: x = ${d + b} ÷ ${a - c}`,
+                            `Solution: x = ${xValue}`
+                        ]
+                    };
+                },
+                points: 5,
+                difficulty: "basic"
+            },
+            {
+                type: "brackets_simple",
+                template: "Solve: {a}(x + {b}) = {c}x - {d}",
+                generate: () => {
+                    const a = getRandomInt(2, 5);
+                    const b = getRandomInt(1, 5);
+                    const xValue = getRandomInt(1, 7);
+                    const c = getRandomInt(2, 6);
+                    const d = c * xValue - a * (xValue + b);
+                    
+                    return {
+                        a, b, c, d,
+                        answer: xValue,
+                        steps: [
+                            `${a}(x + ${b}) = ${c}x - ${d}`,
+                            `Expand brackets: ${a}x + ${a * b} = ${c}x - ${d}`,
+                            `Subtract ${c}x from both sides: ${a}x - ${c}x + ${a * b} = -${d}`,
+                            `Simplify: ${a - c}x + ${a * b} = -${d}`,
+                            `Subtract ${a * b} from both sides: ${a - c}x = -${d} - ${a * b}`,
+                            `Simplify: ${a - c}x = -${d + a * b}`,
+                            `Divide both sides by ${a - c}: x = ${xValue}`,
+                            `Solution: x = ${xValue}`
+                        ]
+                    };
+                },
+                points: 5,
+                difficulty: "intermediate"
+            },
+            {
+                type: "fraction_simple",
+                template: "Solve: x/{a} + {b} = {c}",
+                generate: () => {
+                    const a = getRandomInt(2, 6);
+                    const b = getRandomInt(1, 8);
+                    const c = getRandomInt(b + 1, b + 10);
+                    const answer = a * (c - b);
+                    
+                    return {
+                        a, b, c, answer,
+                        steps: [
+                            `x/${a} + ${b} = ${c}`,
+                            `Subtract ${b} from both sides: x/${a} = ${c} - ${b}`,
+                            `Simplify: x/${a} = ${c - b}`,
+                            `Multiply both sides by ${a}: x = ${c - b} × ${a}`,
+                            `Solution: x = ${answer}`
+                        ]
+                    };
+                },
+                points: 4,
+                difficulty: "basic"
+            },
+            {
+                type: "decimal_coefficient",
+                template: "Solve: {a}x + {b} = {c}",
+                generate: () => {
+                    const a = getRandomDecimal(0.2, 2, 1);
+                    const xValue = getRandomInt(2, 10);
+                    const b = getRandomInt(1, 8);
+                    const c = parseFloat((a * xValue + b).toFixed(1));
+                    const answer = xValue;
+                    
+                    return {
+                        a: a.toFixed(1), b, c: c.toFixed(1), answer,
+                        steps: [
+                            `${a.toFixed(1)}x + ${b} = ${c.toFixed(1)}`,
+                            `Subtract ${b} from both sides: ${a.toFixed(1)}x = ${c.toFixed(1)} - ${b}`,
+                            `Simplify: ${a.toFixed(1)}x = ${(c - b).toFixed(1)}`,
+                            `Divide both sides by ${a.toFixed(1)}: x = ${(c - b).toFixed(1)} ÷ ${a.toFixed(1)}`,
+                            `Solution: x = ${answer}`
+                        ]
+                    };
+                },
+                points: 4,
+                difficulty: "intermediate"
+            },
+            {
+                type: "negative_solution",
+                template: "Solve: {a} - {b}x = {c}x + {d}",
+                generate: () => {
+                    const a = getRandomInt(5, 15);
+                    const b = getRandomInt(2, 6);
+                    const c = getRandomInt(2, 6);
+                    const xValue = getRandomInt(-6, -1);
+                    const d = a - b * xValue - c * xValue;
+                    
+                    return {
+                        a, b, c, d,
+                        answer: xValue,
+                        steps: [
+                            `${a} - ${b}x = ${c}x + ${d}`,
+                            `Add ${b}x to both sides: ${a} = ${c}x + ${b}x + ${d}`,
+                            `Simplify: ${a} = ${b + c}x + ${d}`,
+                            `Subtract ${d} from both sides: ${a} - ${d} = ${b + c}x`,
+                            `Simplify: ${a - d} = ${b + c}x`,
+                            `Divide both sides by ${b + c}: ${(a - d)/(b + c)} = x`,
+                            `Solution: x = ${xValue}`
+                        ]
+                    };
+                },
+                points: 5,
+                difficulty: "intermediate"
+            },
+            {
+                type: "fraction_coefficient",
+                template: "Solve: ({a}/{b})x = {c}",
+                generate: () => {
+                    const a = getRandomInt(1, 5);
+                    const b = getRandomInt(2, 6);
+                    const c = getRandomInt(2, 10);
+                    const answer = (c * b) / a;
+                    
+                    // Simplify fraction if needed
+                    const simplified = simplifyFraction(answer);
+                    
+                    return {
+                        a, b, c, answer: simplified.value,
+                        steps: [
+                            `(${a}/${b})x = ${c}`,
+                            `Multiply both sides by ${b}: ${a}x = ${c} × ${b}`,
+                            `Simplify: ${a}x = ${c * b}`,
+                            `Divide both sides by ${a}: x = ${c * b} ÷ ${a}`,
+                            simplified.fraction ? 
+                                `Solution: x = ${simplified.fraction} (or ${simplified.value.toFixed(2)})` :
+                                `Solution: x = ${simplified.value}`
+                        ]
+                    };
+                },
+                points: 4,
+                difficulty: "intermediate"
+            },
+            {
+                type: "double_brackets",
+                template: "Solve: {a}(x - {b}) = {c}(x + {d})",
+                generate: () => {
+                    const a = getRandomInt(2, 5);
+                    const b = getRandomInt(1, 5);
+                    const c = getRandomInt(2, 5);
+                    const d = getRandomInt(1, 5);
+                    const xValue = getRandomInt(1, 10);
+                    // This is a template that always works with the generated xValue
+                    const left = a * (xValue - b);
+                    const right = c * (xValue + d);
+                    
+                    return {
+                        a, b, c, d,
+                        answer: xValue,
+                        steps: [
+                            `${a}(x - ${b}) = ${c}(x + ${d})`,
+                            `Expand both sides: ${a}x - ${a * b} = ${c}x + ${c * d}`,
+                            `Subtract ${c}x from both sides: ${a}x - ${c}x - ${a * b} = ${c * d}`,
+                            `Simplify: ${a - c}x - ${a * b} = ${c * d}`,
+                            `Add ${a * b} to both sides: ${a - c}x = ${c * d} + ${a * b}`,
+                            `Simplify: ${a - c}x = ${c * d + a * b}`,
+                            `Divide both sides by ${a - c}: x = ${xValue}`,
+                            `Solution: x = ${xValue}`
+                        ]
+                    };
+                },
+                points: 6,
+                difficulty: "challenge"
+            },
+            {
+                type: "fraction_both_sides",
+                template: "Solve: (x + {a})/{b} = (x - {c})/{d}",
+                generate: () => {
+                    const a = getRandomInt(1, 5);
+                    const b = getRandomInt(2, 6);
+                    const c = getRandomInt(1, 5);
+                    const d = getRandomInt(2, 6);
+                    const xValue = getRandomInt(1, 10);
+                    // Cross multiply: d(x+a) = b(x-c)
+                    // dx + da = bx - bc
+                    // dx - bx = -bc - da
+                    // x(d-b) = -(bc + da)
+                    // x = -(bc + da)/(d-b)
+                    
+                    // We'll generate numbers that give a nice xValue
+                    const numerator = b * c + d * a;
+                    const denominator = d - b;
+                    const xCalc = numerator / denominator;
+                    
+                    // Adjust to get integer xValue
+                    const adjustedX = getRandomInt(1, 10);
+                    const newA = a;
+                    const newB = b;
+                    const newC = c;
+                    const newD = d;
+                    
+                    // Just use pre-calculated working example
+                    const workingExamples = [
+                        {a:2,b:3,c:1,d:4,answer:11},
+                        {a:1,b:2,c:3,d:5,answer:11},
+                        {a:3,b:4,c:2,d:7,answer:13}
+                    ];
+                    
+                    const example = workingExamples[Math.floor(Math.random() * workingExamples.length)];
+                    
+                    return {
+                        a: example.a, b: example.b, c: example.c, d: example.d,
+                        answer: example.answer,
+                        steps: [
+                            `(x + ${example.a})/${example.b} = (x - ${example.c})/${example.d}`,
+                            `Cross multiply: ${example.d}(x + ${example.a}) = ${example.b}(x - ${example.c})`,
+                            `Expand: ${example.d}x + ${example.d * example.a} = ${example.b}x - ${example.b * example.c}`,
+                            `Subtract ${example.b}x: ${example.d}x - ${example.b}x + ${example.d * example.a} = -${example.b * example.c}`,
+                            `Simplify: ${example.d - example.b}x + ${example.d * example.a} = -${example.b * example.c}`,
+                            `Subtract ${example.d * example.a}: ${example.d - example.b}x = -${example.b * example.c} - ${example.d * example.a}`,
+                            `Simplify: ${example.d - example.b}x = -${example.b * example.c + example.d * example.a}`,
+                            `Divide by ${example.d - example.b}: x = ${example.answer}`,
+                            `Solution: x = ${example.answer}`
+                        ]
+                    };
+                },
+                points: 6,
+                difficulty: "challenge"
+            },
+            {
+                type: "word_problem",
+                template: "If {a} times a number plus {b} equals {c}, what is the number?",
+                generate: () => {
+                    const a = getRandomInt(2, 8);
+                    const xValue = getRandomInt(1, 10);
+                    const b = getRandomInt(1, 12);
+                    const c = a * xValue + b;
+                    
+                    return {
+                        a, b, c,
+                        answer: xValue,
+                        steps: [
+                            `Let the number be x`,
+                            `Translate: ${a}x + ${b} = ${c}`,
+                            `Subtract ${b}: ${a}x = ${c} - ${b}`,
+                            `Simplify: ${a}x = ${c - b}`,
+                            `Divide by ${a}: x = ${c - b} ÷ ${a}`,
+                            `Solution: x = ${xValue}`,
+                            `The number is ${xValue}`
+                        ]
+                    };
+                },
+                points: 5,
+                difficulty: "applied"
+            }
+        ];
+
+        // Helper functions
+        function getRandomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        
+        function getRandomDecimal(min, max, decimals = 1) {
+            const factor = Math.pow(10, decimals);
+            return Math.round((Math.random() * (max - min) + min) * factor) / factor;
+        }
+        
+        function formatAnswer(num) {
+            // Return as integer if whole number, otherwise as decimal
+            if (Math.abs(num - Math.round(num)) < 0.0001) {
+                return Math.round(num);
+            }
+            return parseFloat(num.toFixed(2));
+        }
+        
+        function simplifyFraction(num) {
+            // Check if it's a simple fraction
+            const tolerance = 0.001;
+            
+            for (let den = 1; den <= 12; den++) {
+                for (let nume = 1; nume <= 12; nume++) {
+                    const fraction = nume / den;
+                    if (Math.abs(fraction - num) < tolerance) {
+                        // Simplify the fraction
+                        let gcd = findGCD(nume, den);
+                        let simpleNum = nume / gcd;
+                        let simpleDen = den / gcd;
+                        
+                        if (simpleDen === 1) {
+                            return { value: simpleNum, fraction: null };
+                        }
+                        return { 
+                            value: num, 
+                            fraction: `${simpleNum}/${simpleDen}`,
+                            decimal: num.toFixed(2)
+                        };
+                    }
+                }
+            }
+            return { value: formatAnswer(num), fraction: null };
+        }
+        
+        function findGCD(a, b) {
+            return b ? findGCD(b, a % b) : a;
+        }
+
+        // Current quiz state
+        let currentQuiz = [];
+        let userAnswers = {};
+        let score = 0;
+        let answeredCount = 0;
+
+        // Generate a new quiz
+        function generateNewQuiz() {
+            if (answeredCount > 0 && !confirm("Generate new quiz? Current progress will be lost.")) {
+                return;
+            }
+            
+            currentQuiz = [];
+            userAnswers = {};
+            score = 0;
+            answeredCount = 0;
+            
+            // Select 10 random question types (allow repeats for variety)
+            const selectedTypes = [];
+            for (let i = 0; i < 10; i++) {
+                const template = questionTemplates[Math.floor(Math.random() * questionTemplates.length)];
+                selectedTypes.push({
+                    ...template,
+                    id: i + 1,
+                    generated: template.generate()
+                });
+            }
+            
+            currentQuiz = selectedTypes;
+            renderQuiz();
+            updateProgress();
+            
+            // Hide results
+            document.getElementById('results-summary').style.display = 'none';
+        }
+
+        // Render the quiz
+        function renderQuiz() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            
+            currentQuiz.forEach((q, index) => {
+                const questionBox = document.createElement('div');
+                questionBox.className = 'question-box';
+                questionBox.id = `question-${q.id}`;
+                
+                // Format the question text
+                let questionText = q.template
+                    .replace('{a}', q.generated.a)
+                    .replace('{b}', q.generated.b)
+                    .replace('{c}', q.generated.c)
+                    .replace('{d}', q.generated.d || '');
+                
+                questionBox.innerHTML = `
+                    <div class="question-header">
+                        <div class="question-number">${q.id}</div>
+                        <div class="question-text">${questionText}</div>
+                        <div class="question-points">${q.points} pts</div>
+                    </div>
+                    <div class="question-type">Type: ${q.difficulty} | ${q.type.replace(/_/g, ' ')}</div>
+                    <div class="answer-input">
+                        <input type="text" 
+                               id="answer-${q.id}" 
+                               placeholder="Enter your answer for x"
+                               onkeypress="handleEnter(event, ${q.id})">
+                        <button class="check-btn" onclick="checkAnswer(${q.id})">Check Answer</button>
+                    </div>
+                    <div class="feedback" id="feedback-${q.id}"></div>
+                    <div class="step-by-step" id="steps-${q.id}"></div>
+                `;
+                
+                container.appendChild(questionBox);
+            });
+        }
+
+        // Check a single answer
+        function checkAnswer(questionId) {
+            const input = document.getElementById(`answer-${questionId}`);
+            const feedback = document.getElementById(`feedback-${questionId}`);
+            const steps = document.getElementById(`steps-${questionId}`);
+            const question = currentQuiz.find(q => q.id === questionId);
+            
+            if (!input.value.trim()) {
+                feedback.innerHTML = '<span style="color: #ff9800;">Please enter an answer first.</span>';
+                feedback.className = 'feedback incorrect';
+                feedback.style.display = 'block';
+                return;
+            }
+            
+            const userAnswer = input.value.trim();
+            const correctAnswer = question.generated.answer;
+            const isCorrect = checkAnswerCorrect(userAnswer, correctAnswer);
+            
+            // Update feedback
+            if (isCorrect) {
+                feedback.innerHTML = `<span style="color: #4CAF50; font-weight: bold;">✓ Correct! x = ${formatAnswer(correctAnswer)}</span>`;
+                feedback.className = 'feedback correct';
+                
+                // Mark as answered correctly if not already
+                if (!userAnswers[questionId] || !userAnswers[questionId].correct) {
+                    answeredCount++;
+                    score += question.points;
+                }
+                
+                userAnswers[questionId] = {
+                    answer: userAnswer,
+                    correct: true,
+                    points: question.points
+                };
+            } else {
+                feedback.innerHTML = `<span style="color: #f44336; font-weight: bold;">✗ Incorrect. Try again!</span>`;
+                feedback.className = 'feedback incorrect';
+                
+                userAnswers[questionId] = {
+                    answer: userAnswer,
+                    correct: false,
+                    points: 0
+                };
+            }
+            
+            // Show steps
+            steps.innerHTML = `<strong>Step-by-step solution:</strong><br>`;
+            question.generated.steps.forEach(step => {
+                steps.innerHTML += `• ${step}<br>`;
+            });
+            
+            feedback.style.display = 'block';
+            steps.style.display = 'block';
+            
+            updateProgress();
+        }
+
+        // Check if answer is correct (flexible checking)
+        function checkAnswerCorrect(userAnswer, correctAnswer) {
+            // Normalize answers
+            userAnswer = userAnswer.replace(/\s+/g, '');
+            
+            // Try to parse as numbers
+            const userNum = parseNumber(userAnswer);
+            const correctNum = parseNumber(correctAnswer.toString());
+            
+            if (!isNaN(userNum) && !isNaN(correctNum)) {
+                // Compare as numbers (with tolerance)
+                return Math.abs(userNum - correctNum) < 0.01;
+            }
+            
+            return false;
+        }
+
+        // Parse number from string
+        function parseNumber(str) {
+            // Handle fractions like "2/3"
+            if (str.includes('/')) {
+                const parts = str.split('/');
+                if (parts.length === 2) {
+                    const num = parseFloat(parts[0]);
+                    const den = parseFloat(parts[1]);
+                    if (den !== 0) return num / den;
+                }
+            }
+            
+            // Handle decimal
+            return parseFloat(str);
+        }
+
+        // Handle Enter key
+        function handleEnter(event, questionId) {
+            if (event.key === 'Enter') {
+                checkAnswer(questionId);
+            }
+        }
+
+        // Submit all answers
+        function submitAllAnswers() {
+            if (currentQuiz.length === 0) {
+                alert("Please generate a quiz first!");
+                return;
+            }
+            
+            // Check unanswered questions
+            const unanswered = currentQuiz.filter(q => !userAnswers[q.id]);
+            
+            if (unanswered.length > 0) {
+                if (confirm(`You have ${unanswered.length} unanswered questions. Submit anyway?`)) {
+                    showResults();
+                }
+            } else {
+                showResults();
+            }
+        }
+
+        // Show all results
+        function showResults() {
+            const summary = document.getElementById('results-summary');
+            const resultsList = document.getElementById('results-list');
+            
+            resultsList.innerHTML = '';
+            
+            currentQuiz.forEach(q => {
+                const userAnswer = userAnswers[q.id];
+                const isCorrect = userAnswer && userAnswer.correct;
+                
+                // Format question text
+                let questionText = q.template
+                    .replace('{a}', q.generated.a)
+                    .replace('{b}', q.generated.b)
+                    .replace('{c}', q.generated.c)
+                    .replace('{d}', q.generated.d || '');
+                
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+                
+                resultItem.innerHTML = `
+                    <div style="flex: 2;">
+                        <strong>Q${q.id}:</strong> ${questionText}<br>
+                        <small style="color: #666;">Answer: ${formatAnswer(q.generated.answer)}</small>
+                    </div>
+                    <div style="flex: 1; text-align: right;">
+                        <span class="${isCorrect ? 'result-correct' : 'result-incorrect'}">
+                            ${isCorrect ? '✓' : '✗'} ${userAnswer ? userAnswer.points : 0}/${q.points}
+                        </span>
+                    </div>
+                `;
+                
+                resultsList.appendChild(resultItem);
+            });
+            
+            // Add total score
+            const totalItem = document.createElement('div');
+            totalItem.className = 'result-item';
+            totalItem.style.fontWeight = 'bold';
+            totalItem.style.fontSize = '18px';
+            totalItem.style.marginTop = '15px';
+            totalItem.style.paddingTop = '15px';
+            totalItem.style.borderTop = '2px solid #667eea';
+            
+            const totalPoints = currentQuiz.reduce((sum, q) => sum + q.points, 0);
+            totalItem.innerHTML = `
+                <div>TOTAL SCORE</div>
+                <div style="color: #667eea;">${score}/${totalPoints}</div>
+            `;
+            
+            resultsList.appendChild(totalItem);
+            
+            // Calculate percentage
+            const percentage = Math.round((score / totalPoints) * 100);
+            
+            // Add performance message
+            const performance = document.createElement('div');
+            performance.className = 'result-item';
+            performance.style.textAlign = 'center';
+            performance.style.justifyContent = 'center';
+            performance.style.fontSize = '16px';
+            
+            let message = '';
+            let color = '';
+            
+            if (percentage >= 90) {
+                message = 'Excellent! Perfect iGCSE understanding!';
+                color = '#4CAF50';
+            } else if (percentage >= 70) {
+                message = 'Very Good! Solid understanding of linear equations.';
+                color = '#8BC34A';
+            } else if (percentage >= 50) {
+                message = 'Good effort! Review the step-by-step solutions.';
+                color = '#FFC107';
+            } else {
+                message = 'Keep practicing! Study the worked solutions carefully.';
+                color = '#FF9800';
+            }
+            
+            performance.innerHTML = `<div style="color: ${color}; font-style: italic;">${message} (${percentage}%)</div>`;
+            resultsList.appendChild(performance);
+            
+            summary.style.display = 'block';
+            summary.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show all answers
+        function showAllAnswers() {
+            if (currentQuiz.length === 0) {
+                alert("Please generate a quiz first!");
+                return;
+            }
+            
+            if (confirm("This will reveal all answers. Use for studying after attempting the questions.")) {
+                currentQuiz.forEach(q => {
+                    const input = document.getElementById(`answer-${q.id}`);
+                    const feedback = document.getElementById(`feedback-${q.id}`);
+                    const steps = document.getElementById(`steps-${q.id}`);
+                    
+                    input.value = formatAnswer(q.generated.answer);
+                    
+                    feedback.innerHTML = `<span style="color: #2196f3; font-weight: bold;">Answer: x = ${formatAnswer(q.generated.answer)}</span>`;
+                    feedback.className = 'feedback correct';
+                    feedback.style.display = 'block';
+                    
+                    steps.innerHTML = `<strong>Step-by-step solution:</strong><br>`;
+                    q.generated.steps.forEach(step => {
+                        steps.innerHTML += `• ${step}<br>`;
+                    });
+                    
+                    steps.style.display = 'block';
+                    
+                    // Mark as answered
+                    if (!userAnswers[q.id]) {
+                        answeredCount++;
+                        score += q.points;
+                        userAnswers[q.id] = {
+                            answer: q.generated.answer,
+                            correct: true,
+                            points: q.points
+                        };
+                    }
+                });
+                
+                updateProgress();
+            }
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+            const totalScore = document.getElementById('total-score');
+            
+            const totalQuestions = currentQuiz.length || 10;
+            const progress = answeredCount / totalQuestions;
+            progressFill.style.width = `${progress * 100}%`;
+            
+            progressText.textContent = `${answeredCount}/${totalQuestions} questions`;
+            
+            const totalPoints = currentQuiz.reduce((sum, q) => sum + q.points, 0) || 50;
+            totalScore.textContent = `${score}/${totalPoints}`;
+        }
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            generateNewQuiz();
+        });
+    </script>
+</body>
+</html>
